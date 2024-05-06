@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -45,8 +46,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -72,6 +75,8 @@ import net.ezra.navigation.ROUTE_CONTACT
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_MENU
 import net.ezra.navigation.ROUTE_SEARCH
+import net.ezra.navigation.ROUTE_STUDENTLIST
+import net.ezra.ui.theme.defaultTextStyle
 
 
  @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -310,13 +315,20 @@ fun HomeScreen(navController: NavHostController) {
 
 
                              Row(
-                                 horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
+                                 horizontalArrangement = Arrangement.Absolute.SpaceBetween,
                                  modifier = Modifier
                                      .fillMaxSize()
+                                     .padding(20.dp)
                              ) {
                                  Text(text = "Popular in Town", textAlign = TextAlign.Justify)
 
-                                 Text(text = "View all", color = Color.Blue, textAlign = TextAlign.End)
+                                 ClickableText(
+                                     AnnotatedString(text = "View All"),
+                                     onClick = {
+                                         navController.navigate(ROUTE_STUDENTLIST) {
+                                             popUpTo(ROUTE_HOME) { inclusive = true }
+                                         }
+                                     })
                              }
 
                              Spacer(modifier = Modifier.height(20.dp))

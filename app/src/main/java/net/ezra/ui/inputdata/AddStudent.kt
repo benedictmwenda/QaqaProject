@@ -293,7 +293,7 @@ fun saveToFirestore(
 
 
 
-    db.collection("Sign_up")
+    db.collection("Product")
         .add(imageInfo)
         .addOnSuccessListener {
 
