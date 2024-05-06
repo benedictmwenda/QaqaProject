@@ -96,7 +96,6 @@ data class Item(
 
     val imageUrl: String? = "",
     val fullname: String? = "",
-    val phone: String? = "",
     val email: String? = "",
     val massage: String? = "",
     val workexperience: String? = "",
@@ -108,7 +107,7 @@ data class Item(
 class FirestoreViewModel : ViewModel() {
 
     private val firestore = Firebase.firestore
-    private val itemsCollection = firestore.collection("Students")
+    private val itemsCollection = firestore.collection("Sign_up")
 
     private val _items = MutableLiveData<List<Item>>()
     val items: LiveData<List<Item>> = _items
@@ -176,7 +175,6 @@ fun ItemList(items: List<Item>) {
                         if (expanded){
                             item.fullname?.let { Text(text = it) }
                             item.email?.let { Text(text = it) }
-                            item.phone?.let { Text(text = it) }
                             item.workexperience?.let { Text(text = it) }
                             item.country?.let { Text(text = it) }
                             item.massage?.let { Text(text = it) }
@@ -239,7 +237,6 @@ fun Student_list(navController: NavHostController, viewModel: FirestoreViewModel
                         if (expanded){
                             item.fullname?.let { Text(text = it) }
                             item.email?.let { Text(text = it) }
-                            item.phone?.let { Text(text = it) }
                             item.workexperience?.let { Text(text = it) }
                             item.country?.let { Text(text = it) }
                             item.massage?.let { Text(text = it) }

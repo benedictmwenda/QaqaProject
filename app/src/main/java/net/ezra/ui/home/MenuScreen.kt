@@ -12,10 +12,12 @@ import androidx.compose.material.BottomNavigationItem
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +38,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import net.ezra.R
 import net.ezra.navigation.ROUTE_ABOUT
+import net.ezra.navigation.ROUTE_ADD_STUDENTS
+import net.ezra.navigation.ROUTE_CONTACT
 import net.ezra.navigation.ROUTE_HOME
+import net.ezra.navigation.ROUTE_MENU
 import net.ezra.ui.theme.AppTheme
 
 
@@ -49,10 +54,12 @@ fun MenuScreen(navController: NavHostController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Top App Bar")
+                    Text(text = "MENU")
                 },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {navController.navigate(ROUTE_HOME) {
+                        popUpTo(ROUTE_MENU) { inclusive = true }
+                    }}) {
                         Icon(Icons.Filled.ArrowBack, "backIcon")
                     }
                 },
@@ -67,44 +74,46 @@ fun MenuScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xff8d6e63)),
+                    .background(Color(0xffd1cbca)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Content of the page",
-                    fontSize = 30.sp,
-                    color = Color.White
-                )
+
             }
 
         },
 
-        bottomBar = {MottomBar()}
+        bottomBar = {MottomBar(navController)}
     )
 }
 
 @Composable
-fun MottomBar() {
+fun MottomBar(navController: NavHostController) {
     val selectedIndex = remember { mutableStateOf(0) }
     BottomNavigation(elevation = 10.dp) {
         BottomNavigationItem(icon = {
             Icon(imageVector = Icons.Default.Home,"")
         },
             label = { Text(text = "Home") }, selected = (selectedIndex.value == 0), onClick = {
-                selectedIndex.value = 0
+                navController.navigate(ROUTE_HOME) {
+                    popUpTo(ROUTE_HOME) { inclusive = true }
+                }
             })
         BottomNavigationItem(icon = {
-            Icon(imageVector = Icons.Default.Favorite,"")
+            Icon(imageVector = Icons.Default.Refresh,"")
         },
-            label = { Text(text = "Favorite") }, selected = (selectedIndex.value == 1), onClick = {
-                selectedIndex.value = 1
+            label = { Text(text = "JobInn") }, selected = (selectedIndex.value == 1), onClick = {
+                navController.navigate(ROUTE_ADD_STUDENTS) {
+                    popUpTo(ROUTE_HOME) { inclusive = true }
+                }
             })
         BottomNavigationItem(icon = {
-            Icon(imageVector = Icons.Default.Person, "")
+            Icon(imageVector = Icons.Default.AccountCircle, "")
         },
             label = { Text(text = "Profile") }, selected = (selectedIndex.value == 2), onClick = {
-                selectedIndex.value = 2
+                navController.navigate(ROUTE_CONTACT) {
+                    popUpTo(ROUTE_HOME) { inclusive = true }
+                }
             })
     }
 }

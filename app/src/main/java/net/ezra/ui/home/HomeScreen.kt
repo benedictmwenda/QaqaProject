@@ -101,6 +101,7 @@ fun HomeScreen(navController: NavHostController) {
 
 
          content = {
+             
              Box(
                  modifier = Modifier
                      .background(color = Color.White)

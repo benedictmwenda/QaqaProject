@@ -1,16 +1,13 @@
 package net.ezra.ui.inputdata
 
 
-import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -32,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -50,7 +46,6 @@ import coil.request.ImageRequest
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
-import net.ezra.R
 import java.util.UUID
 
 
@@ -60,15 +55,9 @@ fun AddStudents(navController: NavHostController) {
         item {
             Box(
                 modifier = Modifier
+                    .background(color = Color.White)
                     .fillMaxSize(),
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.black_background),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
                 Column(
 
                     modifier = Modifier
@@ -80,7 +69,7 @@ fun AddStudents(navController: NavHostController) {
                 ) {
 
                     Text(text = "Sign up to find work you love",style = TextStyle(
-                        color = Color.White,
+                        color = Color.Black,
                         fontSize = 30.sp,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.W700,
@@ -126,10 +115,6 @@ fun AddStudents(navController: NavHostController) {
                     )
 
 
-                    var phone by rememberSaveable {
-                        mutableStateOf("")
-                    }
-
                     var workexperience by rememberSaveable {
                         mutableStateOf("")
                     }
@@ -146,20 +131,12 @@ fun AddStudents(navController: NavHostController) {
 
 
 
-                    OutlinedTextField(
-                        value = phone,
-                        onValueChange = { phone = it },
-                        label = { Text(text = "Phone Number", color = Color.White) },
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                    )
 
                     OutlinedTextField(
 
                         value = workexperience,
                         onValueChange = { workexperience = it },
-                        label = { Text(text = "Occupation", color = Color.White) },
+                        label = { Text(text = "Occupation", color = Color.Black) },
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth()
@@ -168,7 +145,7 @@ fun AddStudents(navController: NavHostController) {
                     OutlinedTextField(
                         value = country,
                         onValueChange = { country = it },
-                        label = { Text(text = "Country", color = Color.White) },
+                        label = { Text(text = "Country", color = Color.Black) },
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth()
@@ -177,7 +154,7 @@ fun AddStudents(navController: NavHostController) {
                     OutlinedTextField(
                         value = massage,
                         onValueChange = { massage = it },
-                        label = { Text(text = "Massage Description", color = Color.White) },
+                        label = { Text(text = "Massage Description", color = Color.Black) },
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth()
@@ -225,29 +202,21 @@ fun AddStudents(navController: NavHostController) {
 
                             )
                     }
-
-                    Button(
-                        modifier = Modifier
-//                .background(color = Color(0xff0606FF))
-                        , onClick = {
-                            photoUri?.let {
-                                uploadImageToFirebaseStorage(
-                                    it,
-                                    fullname,
-                                    phone,
-                                    email,
-                                    workexperience,
-                                    country,
-                                    massage
-                                )
-                            }
-                        }
-                    ) {
+                    OutlinedButton(onClick = {photoUri?.let {
+                        uploadImageToFirebaseStorage(
+                            it,
+                            fullname,
+                            email,
+                            workexperience,
+                            country,
+                            country,
+                            massage
+                        )
+                    }}) {
                         Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "")
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(text = "Register")
                     }
-
 
                 }
 
@@ -303,17 +272,16 @@ fun uploadImageToFirebaseStorage(
 fun saveToFirestore(
     imageUrl: String,
     fullname: String,
-    phone: String,
     email: String,
     workexperience: String,
     country: String,
-    massage: String
+    massage: String,
+    massage1: String
 ) {
     val db = Firebase.firestore
     val imageInfo = hashMapOf(
         "imageUrl" to imageUrl,
         "First Name" to fullname,
-        "Last Name" to phone,
         "Email" to email,
         "Occupation" to workexperience,
         "Country" to country,
@@ -328,10 +296,10 @@ fun saveToFirestore(
     db.collection("Sign_up")
         .add(imageInfo)
         .addOnSuccessListener {
-            "Successfully sent"
+
         }
         .addOnFailureListener {
-           " Handle  the error and try Again in a few minutes"
+           //Handle Error
         }
 }
 @Preview(showBackground = true)
