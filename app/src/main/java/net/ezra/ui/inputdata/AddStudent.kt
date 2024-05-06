@@ -1,6 +1,9 @@
 package net.ezra.ui.inputdata
 
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -13,7 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -41,14 +44,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-
 import coil.request.ImageRequest
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.flow.internal.NoOpContinuation.context
+import net.ezra.R
 import java.util.UUID
+import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 
+var progressDialog: ProgressDialog? = null
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddStudents(navController: NavHostController) {
     LazyColumn {
@@ -296,10 +304,44 @@ fun saveToFirestore(
     db.collection("Product")
         .add(imageInfo)
         .addOnSuccessListener {
+                ocumentReference ->
+
+            progressDialog?.dismiss()
+
+            // Show success dialog
+            val dialogBuilder = AlertDialog.Builder(context)
+            dialogBuilder.setTitle("Success")
+                .setMessage("Data saved successfully!")
+                .setPositiveButton("OK") { _, _ ->
+                    // Optional: Add actions when OK is clicked
+                }
+                .setIcon(R.drawable.logo)
+                .setCancelable(false)
+
+            val alertDialog = dialogBuilder.create()
+            alertDialog.show()
+
+            // Customize the dialog style (optional)
+            val alertDialogStyle = alertDialog.window?.attributes
+            alertDialog.window?.attributes = alertDialogStyle
 
         }
         .addOnFailureListener {
-           //Handle Error
+
+            progressDialog?.dismiss()
+
+
+            AlertDialog.Builder(context)
+                .setTitle("Error")
+                .setMessage("Failed to save data")
+                .setPositiveButton("OK") { _, _ ->
+                    // Optional: Add actions when OK is clicked
+
+
+
+                }
+                .show()
+
         }
 }
 @Preview(showBackground = true)
