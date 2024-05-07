@@ -16,6 +16,8 @@ const val ROUTE_STUDENTLIST = "student_list"
 const val ROUTE_MENU = "menu"
 const val ROUTE_QAQA = "qaqa"
 const val ROUTE_GET = "getstarted"
+const val ROUTE_REGISTER = "register"
+const val ROUTE_PROFILE = "dashboard"
 
 
 

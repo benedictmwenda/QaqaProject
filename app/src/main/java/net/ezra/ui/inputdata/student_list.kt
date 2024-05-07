@@ -16,6 +16,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
@@ -57,7 +58,7 @@ import net.ezra.navigation.ROUTE_ADD_STUDENTS
 import net.ezra.navigation.ROUTE_CONTACT
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_STUDENTLIST
-import net.ezra.ui.searchpanel.SearchScreen
+import net.ezra.ui.searchpanel.Search
 
 
 data class Item(
@@ -137,6 +138,7 @@ fun ItemList(items: List<Item>) {
                         )
 
                         item.fullname?.let { Text(text = it) }
+                        item.email?.let { Text(text = it) }
                         item.workexperience?.let { Text(text = it) }
 
                         if (expanded){
@@ -171,7 +173,7 @@ fun Student_list(navController: NavHostController, viewModel: FirestoreViewModel
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "Students")
+                    Text(text = "catalogue")
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -189,16 +191,18 @@ fun Student_list(navController: NavHostController, viewModel: FirestoreViewModel
 
 
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { navController.navigate(ROUTE_ADD_STUDENTS) {
+                        popUpTo(ROUTE_HOME) { inclusive = true }
+                    }}) {
                         Icon(
-                            imageVector = Icons.Filled.Menu,
+                            imageVector = Icons.Filled.AddCircle,
                             contentDescription = null,
                             tint = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xff0FB06A),
+                    containerColor = Color(0xff2d44e6),
 
 
                     titleContentColor = Color.White,
@@ -211,7 +215,7 @@ fun Student_list(navController: NavHostController, viewModel: FirestoreViewModel
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
-                    .background(Color(0xff9AEDC9)),
+                    .background(Color(0xff92adb9)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 

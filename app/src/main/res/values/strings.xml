@@ -12,5 +12,10 @@
     <string name="home">Home</string>
     <string name="about">about</string>
     <string name="logout">logout</string>
-
+    <string name="QAQA">Qaqa Softwares</string>
+    <string name="add_stud">Student Registration</string>
+    <string name="save_data">Job Inn</string>
+    <string name="select_image">Select Image</string>
+    <string name="developer">Developed with ❤ by QAQA</string>
+    <string name="call">Call me 📲</string>
 </resources>

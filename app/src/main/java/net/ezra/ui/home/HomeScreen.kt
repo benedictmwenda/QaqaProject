@@ -28,6 +28,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -54,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -73,7 +75,9 @@ import net.ezra.navigation.ROUTE_ABOUT
 import net.ezra.navigation.ROUTE_ADD_STUDENTS
 import net.ezra.navigation.ROUTE_CONTACT
 import net.ezra.navigation.ROUTE_HOME
+import net.ezra.navigation.ROUTE_LOGIN
 import net.ezra.navigation.ROUTE_MENU
+import net.ezra.navigation.ROUTE_PROFILE
 import net.ezra.navigation.ROUTE_SEARCH
 import net.ezra.navigation.ROUTE_STUDENTLIST
 import net.ezra.ui.theme.defaultTextStyle
@@ -322,13 +326,27 @@ fun HomeScreen(navController: NavHostController) {
                              ) {
                                  Text(text = "Popular in Town", textAlign = TextAlign.Justify)
 
-                                 ClickableText(
-                                     AnnotatedString(text = "View All"),
+                                 TextButton(
+                                     modifier = Modifier,
                                      onClick = {
                                          navController.navigate(ROUTE_STUDENTLIST) {
                                              popUpTo(ROUTE_HOME) { inclusive = true }
                                          }
-                                     })
+                                     },
+                                 ) {
+                                     Text(
+                                         text = "View All",style = TextStyle(
+                                             color = Color(0xff02aaf3),
+                                             fontSize = 15.sp,
+                                             fontFamily = FontFamily.Cursive,
+                                             fontWeight = FontWeight.Thin,
+                                             fontStyle = FontStyle.Italic,
+                                             letterSpacing = 0.1.em,
+                                             background = Color.Unspecified,
+                                             textDecoration = TextDecoration.None
+                                         )
+                                     )
+                                 }
                              }
 
                              Spacer(modifier = Modifier.height(20.dp))
@@ -837,7 +855,7 @@ fun HomeScreen(navController: NavHostController) {
              Icon(imageVector = Icons.Default.AccountCircle, "")
          },
              label = { Text(text = "Profile") }, selected = (selectedIndex.value == 2), onClick = {
-                 navController.navigate(ROUTE_CONTACT) {
+                 navController.navigate(ROUTE_LOGIN) {
                      popUpTo(ROUTE_HOME) { inclusive = true }
                  }
              })

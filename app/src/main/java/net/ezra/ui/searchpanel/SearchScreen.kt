@@ -1,99 +1,202 @@
 package net.ezra.ui.searchpanel
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import net.ezra.navigation.ROUTE_ADD_STUDENTS
-import net.ezra.navigation.ROUTE_CONTACT
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialogDefaults.containerColor
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
+import net.ezra.R
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_SEARCH
-import net.ezra.navigation.ROUTE_STUDENTLIST
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
+data class YourDataClass(
+
+    val id: String? = "",
+    val imageUrl: String? = "",
+    val studentName: String? = "",
+    val studentClass: String? = "",
+    val phone: String? = "",
+    val location: String? = ""
+
+)
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ResourceAsColor")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavHostController) {
-    Scaffold(
+fun Search(navController: NavHostController) {
+    var searchText by remember { mutableStateOf(TextFieldValue()) }
+    var filteredData by remember { mutableStateOf(emptyList<YourDataClass>()) }
 
-        content = {
-            Button(
-                onClick = {
-                    navController.navigate(ROUTE_STUDENTLIST) {
-                        popUpTo(ROUTE_SEARCH) { inclusive = true }
+    // Firestore reference
+    val firestore = Firebase.firestore
+
+    DisposableEffect(searchText.text) {
+        val query = firestore.collection("Product")
+            .whereGreaterThanOrEqualTo("fullname", searchText.text)
+            .whereLessThanOrEqualTo("workexperience", searchText.text + "\uf8ff")
+
+
+        val listener = query.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                // Handle error
+                return@addSnapshotListener
+            }
+
+            snapshot?.let {
+                val data = it.toObjects(YourDataClass::class.java)
+                filteredData = data
+            }
+        }
+
+        onDispose {
+            listener.remove()
+        }
+    }
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = "Find the dream job")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate(ROUTE_HOME) {
+                            popUpTo(ROUTE_SEARCH) { inclusive = true }
+                        }
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            "backIcon",
+                            tint = Color.White
+                        )
                     }
                 },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.outlinedButtonColors(Color(0xff5bb4fa)),
-                border = BorderStroke(1.5.dp, Color.Transparent),
-                contentPadding = PaddingValues(15.dp),
+
+
+
+                colors = topAppBarColors(
+                    containerColor = Color(0xff1621d4),
+
+
+                    titleContentColor = Color.White,
+                ),
+            )
+        },
+
+        content = {
+            Column(
+
                 modifier = Modifier
-                    .height(50.dp)
-                    .width(150.dp)
+                    .background(Color(0xff9d9999))
+                    .fillMaxSize()
+
             ) {
-                Text("Job INN", color = Color.Black)
+
+                Spacer(modifier = Modifier.height(55.dp))
+
+                TextField(
+                    value = searchText,
+                    onValueChange = { searchText = it },
+                    placeholder = { Text("Search by Name... or Occupation") },
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = {
+                        Icon(imageVector = Icons.Default.Search,
+                            contentDescription = "emailIcon"
+                        ) },
+
+                    )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+
+                LazyVerticalGrid(columns = GridCells.Fixed(2),) {
+
+                    items(filteredData) { item ->
+
+                        Column (
+                            modifier = Modifier
+                                .padding(it)
+                                .fillMaxSize()
+                            ,
+                            horizontalAlignment = Alignment.CenterHorizontally
+
+                        ){
+
+                            SubcomposeAsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(item.imageUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                loading = {
+                                    CircularProgressIndicator()
+                                },
+                                contentDescription = item.studentName,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10))
+                                    .size(150.dp)
+
+                            )
+
+                            item.studentName?.let { Text(text = it) }
+                            item.phone?.let { Text(text = it) }
+
+
+
+
+
+
+
+
+
+
+
+
+                        }
+
+                    }
+
+                }
+
             }
         },
 
-        bottomBar = {BottomBar(navController)}
-    )
-}
 
-@Composable
-fun BottomBar(navController: NavHostController) {
-    val selectedIndex = remember { mutableStateOf(0) }
-    BottomNavigation(elevation = 10.dp) {
-        BottomNavigationItem(icon = {
-            Icon(imageVector = Icons.Default.Home,"")
-        },
-            label = { Text(text = "Home") }, selected = (selectedIndex.value == 0), onClick = {
-                navController.navigate(ROUTE_HOME) {
-                    popUpTo(ROUTE_HOME) { inclusive = true }
-                }
-            })
-        BottomNavigationItem(icon = {
-            Icon(imageVector = Icons.Default.Refresh,"")
-        },
-            label = { Text(text = "JobInn") }, selected = (selectedIndex.value == 1), onClick = {
-                navController.navigate(ROUTE_ADD_STUDENTS) {
-                    popUpTo(ROUTE_HOME) { inclusive = true }
-                }
-            })
-        BottomNavigationItem(icon = {
-            Icon(imageVector = Icons.Default.AccountCircle, "")
-        },
-            label = { Text(text = "Profile") }, selected = (selectedIndex.value == 2), onClick = {
-                navController.navigate(ROUTE_CONTACT) {
-                    popUpTo(ROUTE_HOME) { inclusive = true }
-                }
-            })
-    }
-}
+        )
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewLight() {
-    SearchScreen(navController = rememberNavController())
+
+
 }
 

@@ -53,6 +53,7 @@ import net.ezra.navigation.ROUTE_ADD_STUDENTS
 import net.ezra.navigation.ROUTE_CONTACT
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_MENU
+import net.ezra.navigation.ROUTE_PROFILE
 import net.ezra.ui.theme.AppTheme
 
 
@@ -158,7 +159,7 @@ fun MottomBar(navController: NavHostController) {
             Icon(imageVector = Icons.Default.AccountCircle, "")
         },
             label = { Text(text = "Profile") }, selected = (selectedIndex.value == 2), onClick = {
-                navController.navigate(ROUTE_CONTACT) {
+                navController.navigate(ROUTE_PROFILE) {
                     popUpTo(ROUTE_HOME) { inclusive = true }
                 }
             })

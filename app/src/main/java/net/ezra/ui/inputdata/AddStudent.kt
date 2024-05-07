@@ -48,10 +48,11 @@ import coil.request.ImageRequest
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.flow.internal.NoOpContinuation.context
 import net.ezra.R
 import java.util.UUID
-import kotlin.coroutines.jvm.internal.CompletedContinuation.context
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.res.stringResource
 
 
 var progressDialog: ProgressDialog? = null
@@ -59,6 +60,8 @@ var progressDialog: ProgressDialog? = null
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddStudents(navController: NavHostController) {
+    val context = LocalContext.current
+
     LazyColumn {
         item {
             Box(
@@ -209,23 +212,76 @@ fun AddStudents(navController: NavHostController) {
                             contentScale = ContentScale.Crop,
 
                             )
-                    }
-                    OutlinedButton(onClick = {photoUri?.let {
-                        uploadImageToFirebaseStorage(
-                            it,
-                            fullname,
-                            email,
-                            workexperience,
-                            country,
-                            country,
-                            massage
-                        )
-                    }}) {
-                        Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(text = "Register")
+                    } else {
+
+                        OutlinedButton(
+                            onClick = {
+                                launcher.launch(
+                                    PickVisualMediaRequest(
+                                        //Here we request only photos. Change this to .ImageAndVideo if you want videos too.
+                                        //Or use .VideoOnly if you only want videos.
+                                        mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.select_image))
+                        }
                     }
 
+                        OutlinedButton(onClick = {
+
+                            if (photoUri != null) {
+
+                                progressDialog = ProgressDialog(context)
+                                progressDialog?.setMessage("Uploading data...")
+                                progressDialog?.setCancelable(false)
+                                progressDialog?.show()
+
+                                photoUri?.let {
+
+                                    uploadImageToFirebaseStorage(
+                                        it,
+                                        fullname,
+                                        email,
+                                        workexperience,
+                                        country,massage,context)
+
+
+                                    fullname = ""
+                                    email = ""
+                                    workexperience = ""
+                                    country = ""
+                                    massage = ""
+                                    photoUri = null
+
+                                }
+                            } else if (fullname == ""){
+
+                                Toast.makeText(context, "Please enter class", Toast.LENGTH_SHORT).show()
+                            }
+                            else if (email == ""){
+                                Toast.makeText(context, "Please enter email", Toast.LENGTH_SHORT).show()
+                            }
+                            else if(workexperience == ""){
+                                Toast.makeText(context, "Please enter name", Toast.LENGTH_SHORT).show()
+                            }
+                            else if(massage == ""){
+                                Toast.makeText(context, "Please enter name", Toast.LENGTH_SHORT).show()
+                            }
+
+                            else {
+                                Toast.makeText(context, "Please select an image", Toast.LENGTH_SHORT).show()
+                            }
+
+
+
+                        }) {
+
+                            Text(text = stringResource(id = R.string.save_data))
+
+
+                        }
                 }
 
 
@@ -241,11 +297,11 @@ fun AddStudents(navController: NavHostController) {
 fun uploadImageToFirebaseStorage(
     imageUri: Uri,
     fullname: String,
-    phone: String,
     email: String,
     workexperience: String,
     country: String,
-    massage: String
+    massage: String,
+    context: Context
 ) {
     val storageRef = FirebaseStorage.getInstance().reference
     val imageRef = storageRef.child("images/${UUID.randomUUID()}")
@@ -264,14 +320,22 @@ fun uploadImageToFirebaseStorage(
             saveToFirestore(
                 downloadUri.toString(),
                 fullname,
-                phone,
                 email,
                 workexperience,
                 country,
-                massage
-            )
+                massage,context)
         } else {
+            progressDialog?.dismiss()
 
+            AlertDialog.Builder(context)
+                .setTitle("Error")
+                .setMessage("Failed to upload image: ${task.exception?.message}")
+                .setPositiveButton("OK") { _, _ ->
+                    // Optional: Add actions when OK is clicked
+
+
+                }
+                .show()
 
         }
     }
@@ -284,7 +348,7 @@ fun saveToFirestore(
     workexperience: String,
     country: String,
     massage: String,
-    massage1: String
+    context: Context,
 ) {
     val db = Firebase.firestore
     val imageInfo = hashMapOf(

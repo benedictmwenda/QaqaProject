@@ -10,11 +10,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import net.ezra.ui.Getstarted
 import net.ezra.ui.SplashScreen
+import net.ezra.ui.auth.LoginScreen
+import net.ezra.ui.auth.SignUpScreen
+import net.ezra.ui.authentication.DashboardScreen
 import net.ezra.ui.home.HomeScreen
 import net.ezra.ui.home.MenuScreen
 import net.ezra.ui.inputdata.AddStudents
 import net.ezra.ui.inputdata.Student_list
-import net.ezra.ui.searchpanel.SearchScreen
+import net.ezra.ui.searchpanel.Search
 import net.ezra.ui.shop.QaqaScreen
 
 @Composable
@@ -40,7 +43,7 @@ fun AppNavHost(
         }
 
         composable(ROUTE_SEARCH) {
-            SearchScreen(navController)
+            Search(navController)
         }
         composable(ROUTE_ADD_STUDENTS) {
             AddStudents(navController)
@@ -64,6 +67,18 @@ fun AppNavHost(
 
         composable(ROUTE_GET) {
             Getstarted(navController = navController)
+        }
+
+        composable(ROUTE_PROFILE) {
+            DashboardScreen(navController = navController)
+        }
+
+        composable(ROUTE_REGISTER) {
+            SignUpScreen(navController = navController) {}
+        }
+
+        composable(ROUTE_LOGIN) {
+            LoginScreen(navController = navController){}
         }
 
 
