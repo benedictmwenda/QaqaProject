@@ -153,8 +153,6 @@ fun ItemList(items: List<Item>) {
 
                 }
             }
-
-
         }
     }
 }
