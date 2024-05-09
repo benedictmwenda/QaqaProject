@@ -2,6 +2,7 @@ package net.ezra.ui.auth
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -18,7 +19,7 @@ import net.ezra.navigation.ROUTE_PROFILE
 import net.ezra.navigation.ROUTE_REGISTER
 
 @Composable
-fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
+fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit, darkTheme: Boolean = isSystemInDarkTheme()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }

@@ -98,7 +98,7 @@ fun DashboardScreen(navController: NavHostController)  {
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(ROUTE_HOME) {
+                        navController.navigate(ROUTE_LOGIN) {
                             popUpTo(ROUTE_PROFILE) { inclusive = true }
                         }}) {
                         Icon(Icons.Filled.ArrowBack, "backIcon",tint = Color.White)
@@ -137,7 +137,7 @@ fun DashboardScreen(navController: NavHostController)  {
 
                         }
 
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
 
                         Text(text = "Total Job Inn: $jobinnCount")
 
@@ -154,6 +154,9 @@ fun DashboardScreen(navController: NavHostController)  {
                             Icon(Icons.Filled.Refresh, "backIcon")
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
 
 
 

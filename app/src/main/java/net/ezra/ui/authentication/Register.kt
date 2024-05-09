@@ -2,6 +2,7 @@ package net.ezra.ui.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -19,7 +20,7 @@ import net.ezra.navigation.ROUTE_REGISTER
 
 
 @Composable
-fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
+fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit, darkTheme: Boolean = isSystemInDarkTheme()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }

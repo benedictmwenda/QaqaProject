@@ -1,6 +1,7 @@
  package net.ezra.ui.home
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -91,7 +92,17 @@ fun HomeScreen(navController: NavHostController) {
          topBar = {
              TopAppBar(
                  title = {
-                     Text(text = "Job Inn")
+                     Text(text = "Job Inn",
+                         style = TextStyle(
+                             color = Color.Black,
+                             fontSize = 40.sp,
+                             fontFamily = FontFamily.Serif,
+                             fontWeight = FontWeight.Bold,
+                             fontStyle = FontStyle.Normal,
+                             letterSpacing = 0.1.em,
+                             background = Color.Transparent,
+                             textDecoration = TextDecoration.None
+                         ))
                  },
                  navigationIcon = {
                      IconButton(onClick = {
@@ -122,15 +133,15 @@ fun HomeScreen(navController: NavHostController) {
                          // background Images
 
 
-                         Image(painter = painterResource
-                             (id = R.drawable.ma),
-                             contentDescription = "Job Inn",
-                             modifier = Modifier
-                                 .fillMaxSize()
-//                .clip(CircleShape)
-                             ,
-                             contentScale = ContentScale.None
-                         )
+//                         Image(painter = painterResource
+//                             (id = R.drawable.ma),
+//                             contentDescription = "Job Inn",
+//                             modifier = Modifier
+//                                 .fillMaxSize()
+////                .clip(CircleShape)
+//                             ,
+//                             contentScale = ContentScale.None
+//                         )
 
 
                          //Profile pic, search Button
@@ -162,8 +173,9 @@ fun HomeScreen(navController: NavHostController) {
                              }
                              Row(
                                  verticalAlignment = Alignment.CenterVertically,
+                                 horizontalArrangement = Arrangement.SpaceAround
 
-                                 ) {
+                             ) {
                                  Button(
                                      onClick = {
                                          navController.navigate(ROUTE_SEARCH) {
@@ -324,7 +336,7 @@ fun HomeScreen(navController: NavHostController) {
                                      .fillMaxSize()
                                      .padding(20.dp)
                              ) {
-                                 Text(text = "Popular in Town", textAlign = TextAlign.Justify)
+                                 Text(text = "Popular in Town", color = Color(0xff34d158), textAlign = TextAlign.Center)
 
                                  TextButton(
                                      modifier = Modifier,
@@ -349,7 +361,6 @@ fun HomeScreen(navController: NavHostController) {
                                  }
                              }
 
-                             Spacer(modifier = Modifier.height(20.dp))
 
 
 
@@ -652,7 +663,7 @@ fun HomeScreen(navController: NavHostController) {
                                      ))
                                  Text(text = "They are just some of those who have trusted our services. We hope your name will be in here to.",
                                          style = TextStyle(
-                                         color = Color.Black,
+                                         color = Color.LightGray,
                                      fontSize = 20.sp,
                                      fontFamily = FontFamily.Default,
                                      fontWeight = FontWeight.W200,
@@ -816,7 +827,7 @@ fun HomeScreen(navController: NavHostController) {
                                                  }
 
                                              }
-
+                                             Spacer(modifier = Modifier.height(40.dp))
                                          }
                                      }
                                  }
@@ -863,7 +874,7 @@ fun HomeScreen(navController: NavHostController) {
  }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun PreviewLight() {
     HomeScreen(rememberNavController())
