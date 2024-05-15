@@ -16,6 +16,8 @@ import net.ezra.ui.authentication.DashboardScreen
 import net.ezra.ui.home.HomeScreen
 import net.ezra.ui.home.MenuScreen
 import net.ezra.ui.inputdata.AddStudents
+import net.ezra.ui.inputdata.ProductDetailScreen
+import net.ezra.ui.inputdata.ProductListScreen
 import net.ezra.ui.inputdata.Student_list
 import net.ezra.ui.searchpanel.Search
 import net.ezra.ui.shop.QaqaScreen
@@ -73,12 +75,27 @@ fun AppNavHost(
             DashboardScreen(navController = navController)
         }
 
-        composable(ROUTE_REGISTER) {
-            SignUpScreen(navController = navController) {}
+        composable(ROUTE_LOGIN) {
+            LoginScreen(navController = navController, onLoginSuccess = { navController.navigate(ROUTE_REGISTER) {
+                popUpTo(ROUTE_LOGIN) { inclusive = true }
+            } })
         }
 
-        composable(ROUTE_LOGIN) {
-            LoginScreen(navController = navController){}
+        composable(ROUTE_REGISTER) {
+            SignUpScreen(navController, onSignUpSuccess = {navController.navigate(ROUTE_LOGIN) {
+                popUpTo(ROUTE_REGISTER) { inclusive = true }
+            }}, darkTheme = false)
+        }
+
+        composable(ROUTE_VIEW_PROD) {
+            ProductListScreen(navController = navController, products = listOf() )
+        }
+
+
+
+        composable("productDetail/{productId}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId") ?: ""
+            ProductDetailScreen(navController, productId)
         }
 
 

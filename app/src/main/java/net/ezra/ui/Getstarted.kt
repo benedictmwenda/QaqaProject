@@ -62,7 +62,7 @@ fun Getstarted(navController: NavHostController) {
                     .verticalScroll(rememberScrollState())
                     .weight(2f, false),
             ) {
-                Image(painter = painterResource(id = R.drawable.logoqs),
+                Image(painter = painterResource(id = R.drawable.applogo),
                     contentDescription = "Logo",
                     contentScale = ContentScale.Crop
                 )

@@ -18,7 +18,8 @@ const val ROUTE_QAQA = "qaqa"
 const val ROUTE_GET = "getstarted"
 const val ROUTE_REGISTER = "register"
 const val ROUTE_PROFILE = "dashboard"
-
+const val ROUTE_ADD_PRODUCT = "add_product"
+const val ROUTE_VIEW_PROD = "view_prod"
 
 
 

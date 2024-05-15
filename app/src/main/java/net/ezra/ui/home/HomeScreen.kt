@@ -81,6 +81,7 @@ import net.ezra.navigation.ROUTE_MENU
 import net.ezra.navigation.ROUTE_PROFILE
 import net.ezra.navigation.ROUTE_SEARCH
 import net.ezra.navigation.ROUTE_STUDENTLIST
+import net.ezra.navigation.ROUTE_VIEW_PROD
 import net.ezra.ui.theme.defaultTextStyle
 
 
@@ -229,7 +230,7 @@ fun HomeScreen(navController: NavHostController) {
 
                                  Button(
                                      onClick = {
-                                         navController.navigate(ROUTE_ADD_STUDENTS) {
+                                         navController.navigate(ROUTE_STUDENTLIST) {
                                              popUpTo(ROUTE_HOME) { inclusive = true }
                                          }
                                      },
@@ -248,7 +249,7 @@ fun HomeScreen(navController: NavHostController) {
 
                                  Button(
                                      onClick = {
-                                         navController.navigate(ROUTE_ABOUT) {
+                                         navController.navigate(ROUTE_STUDENTLIST) {
                                              popUpTo(ROUTE_HOME) { inclusive = true }
                                          }
                                      },
@@ -269,7 +270,7 @@ fun HomeScreen(navController: NavHostController) {
 
                                  Button(
                                      onClick = {
-                                         navController.navigate(ROUTE_ABOUT) {
+                                         navController.navigate(ROUTE_STUDENTLIST) {
                                              popUpTo(ROUTE_HOME) { inclusive = true }
                                          }
                                      },
@@ -288,7 +289,7 @@ fun HomeScreen(navController: NavHostController) {
 
                                  Button(
                                      onClick = {
-                                         navController.navigate(ROUTE_ABOUT) {
+                                         navController.navigate(ROUTE_STUDENTLIST) {
                                              popUpTo(ROUTE_HOME) { inclusive = true }
                                          }
                                      },
@@ -307,7 +308,7 @@ fun HomeScreen(navController: NavHostController) {
 
                                  Button(
                                      onClick = {
-                                         navController.navigate(ROUTE_ABOUT) {
+                                         navController.navigate(ROUTE_STUDENTLIST) {
                                              popUpTo(ROUTE_HOME) { inclusive = true }
                                          }
                                      },
@@ -854,14 +855,7 @@ fun HomeScreen(navController: NavHostController) {
                      popUpTo(ROUTE_HOME) { inclusive = true }
                  }
              })
-         BottomNavigationItem(icon = {
-             Icon(imageVector = Icons.Default.Refresh,"")
-         },
-             label = { Text(text = "JobInn") }, selected = (selectedIndex.value == 1), onClick = {
-                 navController.navigate(ROUTE_ADD_STUDENTS) {
-                 popUpTo(ROUTE_HOME) { inclusive = true }
-             }
-             })
+
          BottomNavigationItem(icon = {
              Icon(imageVector = Icons.Default.AccountCircle, "")
          },
